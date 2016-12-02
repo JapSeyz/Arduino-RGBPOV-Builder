@@ -1,0 +1,43 @@
+.column{
+
+    width:50px;
+    height: auto;
+    display: inline-block;
+    margin:5px;
+}
+
+.led{
+    width:50px;
+    height:50px;
+    margin:5px;
+    background:black;
+}
+
+[data-color="green"]{
+    background: green!important;
+}
+
+[data-color="red"]{
+    background: red!important;
+}
+
+[data-color="blue"]{
+    background: blue!important;
+}
+
+.half{
+    width: 48%;
+    margin:1rem;
+    display:inline-block;
+    vertical-align: top;
+}
+
+.led{
+    cursor:pointer;
+}
+
+textarea{
+    display: block;
+    width: 100%;
+    height:300px;
+}
