@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    makeCircle();
+
     // If a cookie has been set with data
     // Load the data and delete the Cookie
     if($.cookie('data')){
@@ -74,13 +76,13 @@ function generate(){
 
             switch(led.attr('data-color')){
                 case 'red':
-                    column += "{1,0,0}";
-                    break;
-                case 'green':
                     column += "{0,1,0}";
                     break;
-                case 'blue':
+                case 'green':
                     column += "{0,0,1}";
+                    break;
+                case 'blue':
+                    column += "{1,0,0}";
                     break;
                 default:
                     column += "{0,0,0}";
@@ -108,7 +110,7 @@ function load(){
     var data = $('.load-area').val().replace(/\r?\n|\r/g, '');
 
     // Initialize Variables
-    var cloumn, leds, domLed;
+    var leds, domLed;
     var hasCheckedSize = false;
 
     // Split the data into Columns
@@ -118,7 +120,7 @@ function load(){
     $.each(columns, function(index, element){
 
         // Split the LEDs into it's own array
-        column = data[index];
+        var column = data[index];
         leds = column.replace(/{{|}},?/g, '').split(/},{/g);
         
         // Loop over all the LEDs
@@ -144,13 +146,13 @@ function load(){
 
             // Give the LEd the correct color
             switch(led){
-                case '1,0,0':
+                case '0,1,0':
                     domLed.attr('data-color', 'red');
                     break;
-                case '0,1,0':
+                case '0,0,1':
                     domLed.attr('data-color', 'green');
                     break;
-                case '0,0,1':
+                case '1,0,0':
                     domLed.attr('data-color', 'blue');
                     break;
                 default:
@@ -158,5 +160,17 @@ function load(){
                     break;
             }
         });
+    });
+}
+
+function makeCircle(){
+    var $columns = $('.column');
+    $.each($columns, function(index, column){
+        $(column).css({
+            "padding-top": (5*$columns.length)+'px',
+            "transform-origin": "0 0",
+            transform: "rotate("+(360/$columns.length * index)+"deg)",
+        });
+
     });
 }

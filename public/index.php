@@ -40,36 +40,37 @@
     </nav>
 
     <div class="container-fluid text-center">
-
+        <div class="column-container">
             <?php
-                // Set the amount of columns to generate
-                $columns = (array_key_exists('columns', $_GET) ? $_GET['columns'] : 25);
+            // Set the amount of columns to generate
+            $columns = (array_key_exists('columns', $_GET) ? $_GET['columns'] : 25);
 
-                // Set the amount of LEDs in the array
-                $leds = (array_key_exists('leds', $_GET) ? $_GET['leds'] : 8);
+            // Set the amount of LEDs in the array
+            $leds = (array_key_exists('leds', $_GET) ? $_GET['leds'] : 8);
 
-                // Generate a fluid layout with x leds in every column
-                    for($i = $columns; $i > 0; $i--){
-                        echo "<div class='column'>";
-                            for($j = $leds; $j > 0; $j--) {
-                                echo "<div class='led'></div>";
-                            }
-                        echo "</div>";
-                    }
+            // Generate a fluid layout with x leds in every column
+            for ($i = $columns; $i > 0; $i--) {
+                echo "<div class='column'>";
+                for ($j = $leds; $j > 0; $j--) {
+                    echo "<div class='led'></div>";
+                }
+                echo "</div>";
+            }
             ?>
-            <br />
-            <button class="btn btn-primary generate">Generate</button>
-            <button class="btn btn-primary load">Load</button>
+        </div>
+        <br />
+        <button class="btn btn-primary generate">Generate</button>
+        <button class="btn btn-primary load">Load</button>
 
-            <div class="row">
-                <div class="half">
-                    <pre class="output"></pre>
-                </div>
-
-                <div class="half">
-                    <textarea class="load-area"></textarea>
-                </div>
+        <div class="row">
+            <div class="half">
+                <pre class="output"></pre>
             </div>
+
+            <div class="half">
+                <textarea class="load-area"></textarea>
+            </div>
+        </div>
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
