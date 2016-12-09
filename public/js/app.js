@@ -29,25 +29,39 @@ $(document).ready(function(){
 
     $('.generate').on('click', generate);
     $('.load').on('click', load);
+
+    $('.output').on('click', function(){
+        SelectText('output');
+    });
 });
 
 function changeLED(that){
     switch(that.attr('data-color')){
         case 'red':
-        that.attr('data-color', 'green');
-        break;
-
+            that.attr('data-color', 'green');
+            break;
         case 'green':
-        that.attr('data-color', 'blue');
-        break;
-
+            that.attr('data-color', 'blue');
+            break;
         case 'blue':
-        that.attr('data-color', 'black');
-        break;
+            that.attr('data-color', 'magenta');
+            break;
+         case 'magenta':
+            that.attr('data-color', 'cyan');
+            break;
+         case 'cyan':
+            that.attr('data-color', 'yellow');
+            break;
+         case 'yellow':
+            that.attr('data-color', 'white');
+            break;
+        case 'white':
+            that.attr('data-color', 'black');
+            break;
 
         default:
-        that.attr('data-color', 'red');
-        break;
+            that.attr('data-color', 'red');
+            break;
     }
 };
 
@@ -67,7 +81,7 @@ function generate(){
     // Loop over all the Columns
     $.each(columns, function(index, element){
         // Start the Byte
-        column = '{';
+        column = '\"';
         leds = $(element).find('.led');
 
         // Loop over the LEDs
@@ -76,26 +90,33 @@ function generate(){
 
             switch(led.attr('data-color')){
                 case 'red':
-                    column += "{0,1,0}";
+                    column += "010";
                     break;
                 case 'green':
-                    column += "{0,0,1}";
+                    column += "001";
                     break;
                 case 'blue':
-                    column += "{1,0,0}";
+                    column += "100";
+                    break;
+                case 'magenta':
+                    column += "110";
+                    break;
+                case 'cyan':
+                    column += "101";
+                    break;
+                case 'yellow':
+                    column += "011";
+                    break;
+                case 'white':
+                    column += "111";
                     break;
                 default:
-                    column += "{0,0,0}";
+                    column += "000";
                     break;
             }
-
-                // Add a comma seperator
-                if(typeof leds[key+1] !== 'undefined'){
-                    column += ',';
-                }
             });
 
-        column += '},\n';
+        column += '\",\n';
         data[index] = column;
     });
 
@@ -107,21 +128,23 @@ function load(){
     var columns = $('.column');
 
     // Data to Parse
-    var data = $('.load-area').val().replace(/\r?\n|\r/g, '');
+    var data = $('.load-area').val().replace(/\r?\n|\r|\"|,$/g, '');
 
     // Initialize Variables
     var leds, domLed;
     var hasCheckedSize = false;
 
     // Split the data into Columns
-    data = data.split(/,{{/g);
+    data = data.split(/,/g);
 
     // Loop over the Columns in the DOM
     $.each(columns, function(index, element){
 
         // Split the LEDs into it's own array
         var column = data[index];
-        leds = column.replace(/{{|}},?/g, '').split(/},{/g);
+
+        leds = column.match(/.{1,3}/g);
+
         
         // Loop over all the LEDs
         $.each(leds, function(key, led){
@@ -146,14 +169,26 @@ function load(){
 
             // Give the LEd the correct color
             switch(led){
-                case '0,1,0':
+                case '010':
                     domLed.attr('data-color', 'red');
                     break;
-                case '0,0,1':
+                case '001':
                     domLed.attr('data-color', 'green');
                     break;
-                case '1,0,0':
+                case '100':
                     domLed.attr('data-color', 'blue');
+                    break;
+                case '110':
+                     domLed.attr('data-color', 'magenta');
+                    break;
+                case '101':
+                     domLed.attr('data-color', 'cyan');
+                    break;
+                case '011':
+                     domLed.attr('data-color', 'yellow');
+                    break;
+                case '111':
+                     domLed.attr('data-color', 'white');
                     break;
                 default:
                     domLed.attr('data-color', 'black');
@@ -168,9 +203,28 @@ function makeCircle(){
     $.each($columns, function(index, column){
         $(column).css({
             "padding-top": (5*$columns.length)+'px',
-            "transform-origin": "0 0",
             transform: "rotate("+(360/$columns.length * index)+"deg)",
         });
 
     });
+}
+
+
+http://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
+function SelectText(element) {
+    var doc = document
+        , text = doc.getElementsByClassName(element)[0]
+        , range, selection
+    ;    
+    if (doc.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else if (window.getSelection) {
+        selection = window.getSelection();        
+        range = document.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
 }
