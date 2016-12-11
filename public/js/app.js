@@ -33,6 +33,24 @@ $(document).ready(function(){
     $('.output').on('click', function(){
         SelectText('output');
     });
+
+    $(document).keypress(function(e) {
+        if(e.which == 114){
+           $("[data-hover] .led").each(function(led){
+            console.log();
+                changeLED($( $("[data-hover] .led").eq(led)));
+           }); // if d is pressed then remove active image
+        }
+    });
+
+    $('.column').on('mouseover', function(){
+        $(this).attr('data-hover', true);
+    });
+
+    $('.column').on('mouseout', function(){
+        $(this).removeAttr('data-hover');
+    });
+
 });
 
 function changeLED(that){
@@ -210,7 +228,7 @@ function makeCircle(){
 }
 
 
-http://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
+// http://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse/987376#987376
 function SelectText(element) {
     var doc = document
         , text = doc.getElementsByClassName(element)[0]
